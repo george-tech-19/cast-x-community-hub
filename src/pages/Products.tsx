@@ -7,21 +7,9 @@ import { SlidersHorizontal, Grid3X3, LayoutGrid, X, ShoppingBag } from "lucide-r
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import productHoodie from "@/assets/product-hoodie.jpg";
-import productTshirt from "@/assets/product-tshirt.jpg";
-import productTshirt2 from "@/assets/product-tshirt2.jpg";
-import productAccessories from "@/assets/product-accessories.jpg";
-
-const allProducts = [
-  { image: productHoodie, name: "Shadow Hoodie", price: "$89", category: "Hoodies", sizes: ["S", "M", "L", "XL"] },
-  { image: productTshirt, name: "Essential Tee – Black", price: "$45", category: "T-Shirts", sizes: ["S", "M", "L"] },
-  { image: productTshirt2, name: "Graphic Tee – White", price: "$55", category: "T-Shirts", sizes: ["M", "L", "XL"] },
-  { image: productAccessories, name: "Street Cap & Chain", price: "$35", category: "Accessories", sizes: ["One Size"] },
-  { image: productHoodie, name: "Midnight Hoodie", price: "$95", category: "Hoodies", sizes: ["S", "M", "L", "XL"] },
-  { image: productTshirt, name: "Core Tee – Black", price: "$40", category: "T-Shirts", sizes: ["S", "M", "L"] },
-  { image: productTshirt2, name: "Art Tee – White", price: "$50", category: "T-Shirts", sizes: ["M", "L", "XL"] },
-  { image: productAccessories, name: "Gold Chain Set", price: "$65", category: "Accessories", sizes: ["One Size"] },
-];
+import { useCart } from "@/context/CartContext";
+import { products, getProductUrl } from "@/lib/products";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const categories = ["All", "Hoodies", "T-Shirts", "Accessories"];
 const sortOptions = ["Newest", "Price: Low to High", "Price: High to Low", "Popular"];
@@ -40,27 +28,26 @@ const Products = () => {
   }, [activeCategory, sortBy]);
 
   const filtered = activeCategory === "All"
-    ? allProducts
-    : allProducts.filter((p) => p.category === activeCategory);
+    ? products
+    : products.filter((p) => p.category === activeCategory);
 
   const sorted = [...filtered].sort((a, b) => {
-    if (sortBy === "Price: Low to High") return parseInt(a.price.slice(1)) - parseInt(b.price.slice(1));
-    if (sortBy === "Price: High to Low") return parseInt(b.price.slice(1)) - parseInt(a.price.slice(1));
+    if (sortBy === "Price: Low to High") return a.price - b.price;
+    if (sortBy === "Price: High to Low") return b.price - a.price;
     return 0;
   });
 
-  const handleAddToCart = (name: string) => {
-    toast.success(`${name} added to cart`, {
-      description: "Order via WhatsApp to complete purchase",
-      action: {
-        label: "Order Now",
-        onClick: () => window.open("https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK", "_blank"),
-      },
-    });
-  };
+  const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
 
-  const handleQuickView = (name: string) => {
-    toast.info(`Quick view: ${name}`, { description: "Full product details coming soon!" });
+  const handleAddToCart = (product: typeof products[number]) => {
+    addToCart(product, {
+      color: product.colors[0]?.name,
+      size: product.sizes[0],
+    });
+    toast.success(`${product.name} added to cart`, {
+      description: `Default: ${product.sizes[0]} / ${product.colors[0]?.name}`,
+    });
   };
 
   const SidebarFilters = ({ className = "" }: { className?: string }) => (
@@ -81,7 +68,7 @@ const Products = () => {
             >
               {cat}
               <span className="ml-auto float-right text-xs opacity-60">
-                {cat === "All" ? allProducts.length : allProducts.filter(p => p.category === cat).length}
+                {cat === "All" ? products.length : products.filter(p => p.category === cat).length}
               </span>
             </button>
           ))}
@@ -118,7 +105,7 @@ const Products = () => {
         <p className="text-foreground font-semibold text-sm">Orange Money & MTN MoMo</p>
         <p className="text-muted-foreground text-xs mt-1">Contact us on WhatsApp to order</p>
         <Button
-          className="w-full mt-4 bg-accent text-accent-foreground hover:bg-accent/90 text-xs font-semibold uppercase tracking-wider"
+          className="w-full mt-4 text-accent-foreground hover:bg-accent/90 text-xs font-semibold uppercase tracking-wider"
           onClick={() => window.open("https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK", "_blank")}
         >
           <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
@@ -215,10 +202,13 @@ const Products = () => {
                 ? Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)
                 : sorted.map((product, i) => (
                     <ProductCard
-                      key={`${product.name}-${i}`}
-                      {...product}
-                      onAddToCart={() => handleAddToCart(product.name)}
-                      onQuickView={() => handleQuickView(product.name)}
+                      key={`${product.slug}-${i}`}
+                      image={product.image}
+                      name={product.name}
+                      price={formatPrice(product.price)}
+                      category={product.category}
+                      detailsUrl={getProductUrl(product)}
+                      onAddToCart={() => handleAddToCart(product)}
                     />
                   ))}
             </div>

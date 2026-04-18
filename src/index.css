@@ -1,4 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
+/* Gotham is a premium/proprietary typeface. If you have Gotham files, self-host them and keep the fallback stack.
+   Otherwise the system fallback will gracefully degrade to Inter / Helvetica Neue / Arial. */
+@font-face {
+  font-family: 'Gotham';
+  src: local('Gotham Bold'), local('Gotham-Bold'),
+       url('/fonts/Gotham-Bold.woff2') format('woff2'),
+       url('/fonts/Gotham-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -6,6 +18,11 @@
 
 @layer base {
   :root {
+    --font-heading: 'Gotham', 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Montserrat', 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-weight-body: 600;
+    --font-weight-heading: 700;
+
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
@@ -52,12 +69,31 @@
     @apply border-border;
   }
 
+  html {
+    font-family: var(--font-body);
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-body);
+    line-height: 1.65;
+  }
+
+  body, button, input, textarea, select, optgroup, label, a, p, span, li {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-body);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tighter;
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-heading);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
   }
 }
 

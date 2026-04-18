@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 const WHATSAPP_LINK = "https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK";
 
@@ -14,12 +15,13 @@ const navItems = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { itemCount } = useCart();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="flex items-center justify-between px-6 md:px-12 lg:px-20 h-16 md:h-20">
         <Link to="/" className="text-xl md:text-2xl font-black tracking-tighter text-foreground">
-          CAST X
+          CAST-X
         </Link>
 
         {/* Desktop Nav */}
@@ -39,15 +41,18 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="hidden md:block">
-          <a
-            href={WHATSAPP_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-6 py-2.5 bg-foreground text-primary-foreground text-sm font-semibold uppercase tracking-wide hover:bg-muted-foreground transition-colors duration-200"
+        <div className="hidden md:block relative">
+          <Link
+            to="/cart"
+            className="inline-flex items-center justify-center w-10 h-10 bg-foreground text-primary-foreground hover:bg-muted-foreground transition-colors duration-200 rounded-full relative"
           >
-            Join Our Community
-          </a>
+            <ShoppingCart size={20} />
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground px-[0.25rem]">
+                {itemCount}
+              </span>
+            )}
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
@@ -77,14 +82,26 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
-            <a
+            {/* <a
               href={WHATSAPP_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-2 inline-block px-6 py-3 bg-foreground text-primary-foreground text-sm font-semibold uppercase tracking-wide text-center"
             >
               Join Our Community
-            </a>
+            </a> */}
+            <Link
+              to="/cart"
+              onClick={() => setIsOpen(false)}
+              className="mt-2 inline-flex items-center justify-center w-12 h-12 bg-foreground text-primary-foreground hover:bg-muted-foreground transition-colors duration-200 rounded-full mx-auto relative"
+            >
+              <ShoppingCart size={24} />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground px-[0.25rem]">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
       )}

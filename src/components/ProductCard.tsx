@@ -1,4 +1,5 @@
-import { ShoppingBag, Eye } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
@@ -6,14 +7,20 @@ interface ProductCardProps {
   name: string;
   price: string;
   category: string;
-  onQuickView?: () => void;
+  detailsUrl: string;
   onAddToCart?: () => void;
 }
 
-const ProductCard = ({ image, name, price, category, onQuickView, onAddToCart }: ProductCardProps) => {
+const ProductCard = ({ image, name, price, category, detailsUrl, onAddToCart }: ProductCardProps) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(detailsUrl);
+  };
+
   return (
-    <div className="group cursor-pointer">
-      <div className="relative overflow-hidden bg-card aspect-[3/4]">
+    <div className={`group cursor-pointer`} onClick={handleCardClick}>
+      <div className="relative overflow-hidden bg-card aspect-[3/4] rounded-3xl">
         <img
           src={image}
           alt={name}
@@ -22,27 +29,6 @@ const ProductCard = ({ image, name, price, category, onQuickView, onAddToCart }:
         />
         <div className="absolute inset-0 bg-background/0 group-hover:bg-background/30 transition-colors duration-300" />
 
-        {/* Quick action buttons */}
-        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-          <Button
-            size="icon"
-            variant="secondary"
-            className="h-9 w-9 bg-foreground text-primary-foreground hover:bg-accent hover:text-accent-foreground"
-            onClick={(e) => { e.stopPropagation(); onQuickView?.(); }}
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="h-9 w-9 bg-foreground text-primary-foreground hover:bg-accent hover:text-accent-foreground"
-            onClick={(e) => { e.stopPropagation(); onAddToCart?.(); }}
-          >
-            <ShoppingBag className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Add to cart bar */}
         <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <Button
             className="w-full bg-foreground text-primary-foreground hover:bg-accent hover:text-accent-foreground text-xs font-semibold uppercase tracking-wider"

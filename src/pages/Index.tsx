@@ -2,23 +2,18 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
+import { useCart } from "@/context/CartContext";
+import { useCurrency } from "@/hooks/useCurrency";
+import { getFeaturedProducts, getProductUrl } from "@/lib/products";
 import heroBg from "@/assets/hero-bg.jpg";
-import productHoodie from "@/assets/product-hoodie.jpg";
-import productTshirt from "@/assets/product-tshirt.jpg";
-import productTshirt2 from "@/assets/product-tshirt2.jpg";
-import productAccessories from "@/assets/product-accessories.jpg";
 import communityBg from "@/assets/community-bg.jpg";
 
 const WHATSAPP_LINK = "https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK";
 
-const featuredProducts = [
-  { image: productHoodie, name: "Shadow Hoodie", price: "$89", category: "Hoodies" },
-  { image: productTshirt, name: "Essential Tee", price: "$45", category: "T-Shirts" },
-  { image: productTshirt2, name: "Graphic Tee", price: "$55", category: "T-Shirts" },
-  { image: productAccessories, name: "Street Cap & Chain", price: "$35", category: "Accessories" },
-];
-
 const Index = () => {
+  const { addToCart } = useCart();
+  const { formatPrice } = useCurrency();
+
   return (
     <Layout>
       {/* Hero */}
@@ -28,11 +23,11 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
         </div>
         <div className="relative z-10 section-padding pb-16 md:pb-24 w-full">
-          <h1 className="hero-heading text-foreground animate-fade-in">
-            Build.<br />Create.<br />Connect.
+          <h1 className="text-5xl animate-fade-in underline decoration-green-500 underline-offset-10">
+            {/* Build.<br />Create.<br />Connect. */}MADE OF STREET
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-md animate-fade-in" style={{ animationDelay: "0.2s", opacity: 0 }}>
-            More than a brand. A movement.
+          <p className="mt-3 text-lg md:text-1xl text-muted-foreground max-w-md animate-fade-in" style={{ animationDelay: "0.2s", opacity: 0 }}>
+            What we endure shapes who we become.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: "0.4s", opacity: 0 }}>
             <Link
@@ -53,23 +48,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Intro */}
-      <section className="section-padding">
-        <div className="max-w-3xl">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">Who We Are</p>
-          <h2 className="section-heading text-foreground">
-            CAST X is where street culture meets digital innovation
-          </h2>
-          <p className="mt-6 text-muted-foreground text-lg leading-relaxed">
-            We're building a community of creators, entrepreneurs, and innovators who believe in the power of
-            collaboration. Our clothing is just the beginning — it's the uniform of a movement.
-          </p>
-          <Link to="/about" className="inline-flex items-center gap-2 mt-8 text-foreground font-semibold text-sm uppercase tracking-wide hover:gap-4 transition-all">
-            Learn More <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
-
       {/* Featured Products */}
       <section className="section-padding border-t border-border">
         <div className="flex items-end justify-between mb-12">
@@ -81,12 +59,40 @@ const Index = () => {
             View All <ArrowRight size={16} />
           </Link>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.name} {...product} />
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {getFeaturedProducts().map((product) => (
+            <ProductCard
+              key={product.slug}
+              image={product.image}
+              name={product.name}
+              price={formatPrice(product.price)}
+              category={product.category}
+              detailsUrl={getProductUrl(product)}
+              onAddToCart={() => addToCart(product, { color: product.colors[0]?.name, size: product.sizes[0] })}
+            />
           ))}
         </div>
       </section>
+
+      {/* Intro */}
+      <section className="section-padding">
+        <div className="max-w-3xl">
+          <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">Who We Are</p>
+          <h2 className="section-heading text-foreground">
+            CAST-X is a premium streetwear concept rooted in real stories and unfiltered identity.
+          </h2>
+          <p className="mt-6 text-muted-foreground text-lg leading-relaxed">
+            Where we're from, survival isn’t poetic
+            it’s reality.
+            You don’t pick your path
+            you fight through it.
+          </p>
+          <Link to="/about" className="inline-flex items-center gap-2 mt-8 text-foreground font-semibold text-sm uppercase tracking-wide hover:gap-4 transition-all">
+            Learn More <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+
 
       {/* Community Highlight */}
       <section className="relative min-h-[70vh] flex items-center">
@@ -120,9 +126,9 @@ const Index = () => {
         <h2 className="section-heading text-foreground mb-16">From the community</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { quote: "CAST X isn't just clothing — it's an identity. Being part of this community changed my perspective on what's possible.", author: "Marcus T." },
-            { quote: "The network I've built through CAST X has opened doors I never knew existed. This is more than a brand.", author: "Amina K." },
-            { quote: "From the quality of the pieces to the energy of the community, everything about CAST X is intentional and powerful.", author: "David L." },
+            { quote: "I’ve been following CAST-X for a while, and what I like most is the mindset. It’s not just about drops, it’s about building something more responsible.", author: " Amin." },
+            { quote: "The pieces feel solid, and the message behind the brand is clear. You can tell it’s not just about now — it’s about the future too.", author: "Bessem" },
+            { quote: "Everything about CAST-X feels thought through — from the message to the quality. It’s only a matter of time.", author: "Eric" },
           ].map((t) => (
             <div key={t.author} className="border border-border p-8 hover-lift">
               <p className="text-foreground text-lg leading-relaxed mb-6">"{t.quote}"</p>

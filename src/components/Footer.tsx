@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { MessageCircle, Instagram, Twitter } from "lucide-react";
+import tiktok from "@/assets/tiktok.webp";
+import { MessageCircle, Instagram, Twitter, Facebook, TestTube2Icon } from "lucide-react";
 
-const WHATSAPP_LINK = "https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK";
-
+const WHATSAPP_LINK = "https://whatsapp.com/channel/0029VbBrQbo17En1SxcWC80f";
 const Footer = () => {
   return (
     <footer className="bg-card border-t border-border">
@@ -27,9 +27,9 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
             <Link to="/" className="text-2xl font-black tracking-tighter text-foreground">
-              CAST X
+              CAST-X
             </Link>
-            <p className="text-muted-foreground text-sm mt-2">Build. Create. Connect.</p>
+            <p className="text-muted-foreground text-sm mt-2">Survive so you get to live.</p>
           </div>
 
           <div className="flex flex-wrap gap-6">
@@ -50,21 +50,27 @@ const Footer = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <a href="https://www.facebook.com/share/1C6Yuat47b/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Facebook size={20} />
+            </a>
             <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
               <MessageCircle size={20} />
             </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href="https://www.instagram.com/cast_x_official?igsh=MTl1d3hhNWVuMjU4Mg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
               <Instagram size={20} />
             </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href="https://x.com/castx3?s=11" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
               <Twitter size={20} />
+            </a>
+            <a href="https://www.tiktok.com/@castxclothing?_r=1&_t=ZS-95d0AmV8Y9l" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <img src={tiktok} alt="TikTok" className="w-5 h-5" />
             </a>
           </div>
         </div>
 
         <div className="mt-12 pt-6 border-t border-border text-center">
           <p className="text-muted-foreground text-xs uppercase tracking-widest">
-            © {new Date().getFullYear()} CAST X. All rights reserved.
+            © {new Date().getFullYear()} CAST-X. All rights reserved.
           </p>
         </div>
       </div>

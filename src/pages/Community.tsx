@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { ArrowRight, Users, Lightbulb, BookOpen, Handshake } from "lucide-react";
 import communityBg from "@/assets/community-bg.jpg";
 
-const WHATSAPP_LINK = "https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK";
+const WHATSAPP_LINK = "https://whatsapp.com/channel/0029VbBrQbo17En1SxcWC80f";
 
 const benefits = [
   { icon: Users, title: "Networking", desc: "Connect with creators, entrepreneurs, and innovators from around the world." },
@@ -23,7 +23,7 @@ const Community = () => {
         <div className="relative z-10 section-padding w-full">
           <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">Community</p>
           <h1 className="hero-heading text-foreground max-w-4xl">
-            Join the<br />CAST X<br />Movement
+            Join the<br />CAST-X<br />Movement
           </h1>
           <p className="mt-6 text-muted-foreground text-xl max-w-lg leading-relaxed">
             A space for creators, entrepreneurs, and innovators to connect, grow, and build the future together.
