@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, ShoppingCart, Check } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, Trash2 } from "lucide-react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -24,7 +24,7 @@ const ProductDetail = () => {
     [slug]
   );
 
-  const { addToCart } = useCart();
+  const { addToCart, isInCart, toggleCart } = useCart();
   const { formatPrice } = useCurrency();
 
   const [selectedColor, setSelectedColor] = useState(
@@ -33,6 +33,14 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState(
     product?.sizes[0] || ""
   );
+  const [productInCart, setProductInCart] = useState(false);
+
+  useEffect(() => {
+    if (product) {
+      const inCart = isInCart(product, selectedColor, selectedSize);
+      setProductInCart(inCart);
+    }
+  }, [product, selectedColor, selectedSize, isInCart]);
 
   if (!product) {
     return (
@@ -48,14 +56,18 @@ const ProductDetail = () => {
   }
 
   const handleAddToCart = () => {
-    addToCart(product, {
+    toggleCart(product, {
       color: selectedColor,
       size: selectedSize,
     });
 
-    toast.success(`${product.name} added to cart`, {
-      description: `Size: ${selectedSize}, Color: ${selectedColor}`,
-    });
+    if (productInCart) {
+      toast.success(`${product.name} removed from cart`);
+    } else {
+      toast.success(`${product.name} added to cart`, {
+        description: `Size: ${selectedSize}, Color: ${selectedColor}`,
+      });
+    }
   };
 
   return (
@@ -66,7 +78,7 @@ const ProductDetail = () => {
             
             {/* IMAGE SECTION */}
             <div className="w-full lg:w-[50%] rounded-2xl md:rounded-3xl overflow-hidden bg-card border border-border">
-              <div className="relative w-full h-80 md:h-[5000px] lg:h-[600px]">
+              <div className="relative w-full h-80 md:h-[500px] lg:h-[600px]">
                 <Carousel
                   plugins={[
                     Autoplay({
@@ -220,10 +232,24 @@ const ProductDetail = () => {
               {/* ACTIONS */}
               <div className="flex flex-col md:flex-row gap-3">
                 <Button
-                  className="w-full md:w-auto px-8 py-3 text-sm font-semibold uppercase"
+                  className={`w-full md:w-auto px-8 py-3 text-sm font-semibold uppercase flex items-center justify-center gap-2 ${
+                    productInCart
+                      ? "bg-red-500 text-white hover:bg-red-600"
+                      : ""
+                  }`}
                   onClick={handleAddToCart}
                 >
-                  Add to Cart
+                  {productInCart ? (
+                    <>
+                      <Trash2 className="w-4 h-4" />
+                      Remove from Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-4 h-4" />
+                      Add to Cart
+                    </>
+                  )}
                 </Button>
 
                 <Link
