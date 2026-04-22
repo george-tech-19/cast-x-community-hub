@@ -1,6 +1,9 @@
-import { ShoppingBag, Eye } from "lucide-react";
+import { ShoppingBag, Eye, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/CartContext";
+import { toast } from "sonner";
+import type { Product } from "@/lib/products";
 import {
   Carousel,
   CarouselContent,
@@ -17,6 +20,7 @@ interface ProductCardProps {
   category: string;
   detailsUrl: string;
   onAddToCart?: () => void;
+  product?: Product;
 }
 
 const ProductCard = ({
@@ -26,12 +30,18 @@ const ProductCard = ({
   category,
   detailsUrl,
   onAddToCart,
+  product,
 }: ProductCardProps) => {
   const navigate = useNavigate();
+  const { isInCart, toggleCart } = useCart();
 
   const handleCardClick = () => {
     navigate(detailsUrl);
   };
+
+  const productInCart = product
+    ? isInCart(product, product.colors[0]?.name ?? "Default", product.sizes[0] ?? "One Size")
+    : false;
 
   return (
     <div className="group cursor-pointer w-full" onClick={handleCardClick}>
@@ -68,28 +78,53 @@ const ProductCard = ({
         <div className="absolute inset-0 bg-background/20 md:bg-background/0 md:group-hover:bg-background/30 transition-colors duration-300" />
 
         {/* ACTION BUTTONS */}
-        <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3 space-y-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300">
-          <div className="flex flex-col sm:flex-row gap-2 backdrop-blur-md bg-background/60 rounded-xl p-2">
+        <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3 space-y-1.5 md:space-y-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300">
+          <div className="flex flex-col sm:flex-row gap-1.5 md:gap-2 backdrop-blur-md bg-background/60 rounded-xl p-1.5 md:p-2">
             <Button
-              className="flex-1 bg-foreground text-primary-foreground hover:bg-accent hover:text-accent-foreground text-xs font-semibold uppercase tracking-wider"
+              className={`flex-1 text-[10px] md:text-xs font-semibold uppercase tracking-normal md:tracking-wider h-auto py-1.5 md:py-2 ${
+                productInCart
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : "bg-foreground text-primary-foreground hover:bg-accent hover:text-accent-foreground"
+              }`}
               onClick={(e) => {
                 e.stopPropagation();
-                onAddToCart?.();
+                if (product) {
+                  toggleCart(product, {
+                    color: product.colors[0]?.name,
+                    size: product.sizes[0],
+                  });
+                  if (productInCart) {
+                    toast.success(`${product.name} removed from cart`);
+                  } else {
+                    toast.success(`${product.name} added to cart`);
+                  }
+                } else {
+                  onAddToCart?.();
+                }
               }}
             >
-              <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
-              Add to Cart
+              {productInCart ? (
+                <>
+                  <Trash2 className="h-3 w-3 md:h-3 md:w-3 mr-1" />
+                  Remove from Cart
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-3 w-3 md:h-3 md:w-3 mr-1" />
+                  Add to Cart
+                </>
+              )}
             </Button>
 
             <Button
               variant="outline"
-              className="flex-1 border-foreground text-foreground hover:bg-foreground hover:text-primary-foreground text-xs font-semibold uppercase tracking-wider"
+              className="flex-1 border-foreground text-foreground hover:bg-foreground hover:text-primary-foreground text-[10px] md:text-xs font-semibold uppercase tracking-normal md:tracking-wider h-auto py-1.5 md:py-2"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(detailsUrl);
               }}
             >
-              <Eye className="h-3.5 w-3.5 mr-1.5" />
+              <Eye className="h-3 w-3 md:h-3 md:w-3 mr-1" />
               View Details
             </Button>
           </div>

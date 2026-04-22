@@ -115,16 +115,16 @@ const Cart = () => {
                     </div>
                     <div className="flex justify-between">
                       <span>Shipping</span>
-                      <span>Free</span>
+                      <span>-</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Tax</span>
-                      <span>{formatPrice(subtotal * 0.08)}</span>
+                      <span>-</span>
                     </div>
                     <hr className="border-border" />
                     <div className="flex justify-between text-lg font-semibold">
                       <span>Total</span>
-                      <span>{formatPrice(subtotal * 1.08)}</span>
+                      <span>{formatPrice(subtotal)}</span>
                     </div>
                   </div>
                   <button

@@ -17,6 +17,8 @@ type CartContextType = {
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
+  isInCart: (product: Product, color: string, size: string) => boolean;
+  toggleCart: (product: Product, options?: { color?: string; size?: string }) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -49,6 +51,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const createCartId = (product: Product, color: string, size: string) =>
     `${product.slug}:${color}:${size}`;
+
+  const isInCart = (product: Product, color: string, size: string) => {
+    const id = createCartId(product, color, size);
+    return items.some((item) => item.id === id);
+  };
+
+  const toggleCart = (product: Product, options: { color?: string; size?: string } = {}) => {
+    const color = options.color ?? product.colors[0]?.name ?? "Default";
+    const size = options.size ?? product.sizes[0] ?? "One Size";
+    const id = createCartId(product, color, size);
+
+    if (isInCart(product, color, size)) {
+      removeFromCart(id);
+    } else {
+      addToCart(product, options);
+    }
+  };
 
   const addToCart = (product: Product, options: { color?: string; size?: string } = {}) => {
     const color = options.color ?? product.colors[0]?.name ?? "Default";
@@ -85,7 +104,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const clearCart = () => setItems([]);
 
   return (
-    <CartContext.Provider value={{ items, itemCount, subtotal, addToCart, removeFromCart, updateQuantity, clearCart }}>
+    <CartContext.Provider value={{ items, itemCount, subtotal, addToCart, removeFromCart, updateQuantity, clearCart, isInCart, toggleCart }}>
       {children}
     </CartContext.Provider>
   );

@@ -68,6 +68,7 @@ const Index = () => {
               price={formatPrice(product.price)}
               category={product.category}
               detailsUrl={getProductUrl(product)}
+              product={product}
               onAddToCart={() => addToCart(product, { color: product.colors[0]?.name, size: product.sizes[0] })}
             />
           ))}

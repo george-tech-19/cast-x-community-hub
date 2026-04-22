@@ -208,6 +208,7 @@ const Products = () => {
                       price={formatPrice(product.price)}
                       category={product.category}
                       detailsUrl={getProductUrl(product)}
+                      product={product}
                       onAddToCart={() => handleAddToCart(product)}
                     />
                   ))}
