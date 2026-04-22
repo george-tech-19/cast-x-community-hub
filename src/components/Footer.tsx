@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import tiktok from "@/assets/tiktok.webp";
+import wap from "@/assets/wap.png";
 import { MessageCircle, Instagram, Twitter, Facebook, TestTube2Icon } from "lucide-react";
 
 const WHATSAPP_LINK = "https://whatsapp.com/channel/0029VbBrQbo17En1SxcWC80f";
@@ -54,7 +55,7 @@ const Footer = () => {
               <Facebook size={20} />
             </a>
             <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-              <MessageCircle size={20} />
+              <img src={wap} alt="whatsapp" className="w-5 h-5" />
             </a>
             <a href="https://www.instagram.com/cast_x_official?igsh=MTl1d3hhNWVuMjU4Mg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
               <Instagram size={20} />

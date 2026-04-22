@@ -63,7 +63,7 @@ const Index = () => {
           {getFeaturedProducts().map((product) => (
             <ProductCard
               key={product.slug}
-              image={product.image}
+              images={product.images}
               name={product.name}
               price={formatPrice(product.price)}
               category={product.category}

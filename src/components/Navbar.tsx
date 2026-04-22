@@ -41,27 +41,29 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="hidden md:block relative">
-          <Link
-            to="/cart"
-            className="inline-flex items-center justify-center w-10 h-10 bg-foreground text-primary-foreground hover:bg-muted-foreground transition-colors duration-200 rounded-full relative"
-          >
-            <ShoppingCart size={20} />
-            {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground px-[0.25rem]">
-                {itemCount}
-              </span>
-            )}
-          </Link>
-        </div>
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <Link
+              to="/cart"
+              className="inline-flex items-center justify-center w-10 h-10 bg-foreground text-primary-foreground hover:bg-muted-foreground transition-colors duration-200 rounded-full relative"
+            >
+              <ShoppingCart size={20} />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground px-[0.25rem]">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+          </div>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-foreground"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          {/* Mobile Toggle */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-foreground"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}

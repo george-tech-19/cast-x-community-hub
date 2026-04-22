@@ -18,15 +18,15 @@ export type Product = {
   price: number;
   priceLabel: string;
   category: string;
-  image: string; // Keep for backward compatibility
-  images: string[]; // New field for multiple images
+  image: string;
+  images: string[];
   description: string;
-  sizes: string[];
+  sizes: readonly string[];
   colors: Array<{ name: string; value: string }>;
-  features: string[];
+  features: readonly string[];
 };
 
-export const products: Product[] = [
+const rawProducts = [
   {
     slug: "ONLY GOD SAVES GREY TSHIRT",
     name: "ONLY GOD SAVES GREY TSHIRT",
@@ -42,13 +42,9 @@ export const products: Product[] = [
     ],
     features: [
       "ORGANIC COTTON",
-
       "BOXY FIT",
-
       "280 GSM",
-
       "SCREEN PRINT",
-
     ],
   },
   {
@@ -66,15 +62,10 @@ export const products: Product[] = [
     ],
     features: [
       "COMBED ORGANIC COTTON",
-
       "BOXY FIT",
-
       "DOUBLE STITCHED",
-
       "HEAVY 320 GSM",
-
       "3D EMBROIDERED PRINT",
-
     ],
   },
   {
@@ -91,22 +82,46 @@ export const products: Product[] = [
       { name: "Warm Beige", value: "#F5F5F5" },
     ],
     features: [
-      "COMBED ORGANIC COTTON",
-
-      "BOXY FIT",
-
+      "COMBED ORGANIC COTTON","BOXY FIT",
       "DOUBLE STITCHED",
-
       "HEAVY 320 GSM",
-
       "3D EMBROIDERED PRINT",
-
     ],
   },
-];
+] as const;
+
+type RawProduct = typeof rawProducts[number];
+
+const processImage = (img: unknown): string => {
+  if (typeof img === "string") return img;
+  if (typeof img === "object" && img !== null) {
+    if ("default" in img) return (img as { default: string }).default;
+    if ("src" in img) return (img as { src: string }).src;
+  }
+  return String(img);
+};
+
+const processProduct = (p: RawProduct): Product => ({
+  ...p,
+  image: processImage(p.image),
+  images: p.images.map(processImage),
+});
+
+export const products: Product[] = rawProducts.map(processProduct);
 
 export const getProductBySlug = (slug: string) => products.find((product) => product.slug === slug);
 
 export const getFeaturedProducts = () => products.slice(0, 3);
 
 export const getProductUrl = (product: Product) => `/product/${product.slug}`;
+
+export const normalizeImage = (img: unknown): string => {
+  if (typeof img === "string") return img;
+  if (typeof img === "object" && img !== null && "default" in img) {
+    return (img as { default: string }).default;
+  }
+  if (typeof img === "object" && img !== null && "src" in img) {
+    return (img as { src: string }).src;
+  }
+  return String(img);
+};

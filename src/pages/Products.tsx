@@ -203,7 +203,7 @@ const Products = () => {
                 : sorted.map((product, i) => (
                     <ProductCard
                       key={`${product.slug}-${i}`}
-                      image={product.image}
+                      images={product.images}
                       name={product.name}
                       price={formatPrice(product.price)}
                       category={product.category}
