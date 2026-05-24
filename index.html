@@ -1,39 +1,63 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>CAST-X — Made of Street. Built with Purpose.</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="description" content="CAST-X is a premium streetwear brand rooted in faith, resilience, and culture. Discover 'Only God Saves' — a collection inspired by survival, loyalty, and purpose. Sustainable. Intentional. Global." />
+  <title>CAST-X — Made of Street. Built with Purpose.</title>
 
-    <meta name="author" content="CAST-X" />
+  <meta name="description"
+    content="CAST-X is a premium streetwear brand rooted in faith, resilience, and culture. Discover 'Only God Saves' — a collection inspired by survival, loyalty, and purpose. Sustainable. Intentional. Global." />
 
-    <!-- Open Graph (Facebook / WhatsApp / LinkedIn) -->
-    <meta property="og:title" content="CAST-X — Made of Street. Built with Purpose." />
-    <meta property="og:description" content="More than clothing. CAST-X represents faith, strength, and the journey through struggle. Explore the 'Only God Saves' drop from 'The Made Of Street' collection." />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="CAST-X" />
+  <meta name="author" content="CAST-X" />
 
-    <!-- Optional: Replace with your real hosted image -->
-    <meta property="og:image" content="https://yourdomain.com/images/castx-og-image.jpg" />
+  <!-- Open Graph (Facebook / WhatsApp / LinkedIn) -->
+  <meta property="og:title" content="CAST-X — Made of Street. Built with Purpose." />
+  <meta property="og:description"
+    content="More than clothing. CAST-X represents faith, strength, and the journey through struggle. Explore the 'Only God Saves' drop from 'The Made Of Street' collection." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CAST-X" />
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CAST-X — Made of Street. Built with Purpose." />
-    <meta name="twitter:description" content="Faith-driven streetwear inspired by survival, loyalty, and purpose. Discover CAST-X." />
+  <!-- Optional: Replace with your real hosted image -->
+  <meta property="og:image" content="https://yourdomain.com/images/castx-og-image.jpg" />
 
-    <!-- Optional: Replace with your real image -->
-    <meta name="twitter:image" content="https://yourdomain.com/images/castx-og-image.jpg" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CAST-X — Made of Street. Built with Purpose." />
+  <meta name="twitter:description"
+    content="Faith-driven streetwear inspired by survival, loyalty, and purpose. Discover CAST-X." />
 
-    <!-- Keywords (still useful for some engines) -->
-    <meta name="keywords" content="CAST-X, streetwear, faith clothing, Only God Saves, luxury streetwear, sustainable fashion, African streetwear, premium t-shirts, urban fashion, designer streetwear" />
+  <!-- Optional: Replace with your real image -->
+  <meta name="twitter:image" content="https://yourdomain.com/images/castx-og-image.jpg" />
 
-  </head>
+  <!-- Keywords (still useful for some engines) -->
+  <meta name="keywords"
+    content="CAST-X, streetwear, faith clothing, Only God Saves, luxury streetwear, sustainable fashion, African streetwear, premium t-shirts, urban fashion, designer streetwear" />
+  <!-- Meta Pixel Code -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1415526572851872');
+    fbq('track', 'PageView');
+  </script>
+  <!-- End Meta Pixel Code -->
+</head>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<body>
+  <div id="root"></div>
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1415526572851872&ev=PageView&noscript=1" /></noscript>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
