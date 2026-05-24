@@ -8,7 +8,7 @@ import { getFeaturedProducts, getProductUrl } from "@/lib/products";
 import heroBg from "@/assets/hero-bg.jpg";
 import communityBg from "@/assets/community-bg.jpg";
 
-const WHATSAPP_LINK = "https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK";
+const WHATSAPP_LINK = "https://whatsapp.com/channel/0029VbBrQbo17En1SxcWC80f";
 
 const Index = () => {
   const { addToCart } = useCart();
