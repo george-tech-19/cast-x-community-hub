@@ -82,7 +82,8 @@ const rawProducts = [
       { name: "Warm Beige", value: "#F5F5F5" },
     ],
     features: [
-      "COMBED ORGANIC COTTON","BOXY FIT",
+      "COMBED ORGANIC COTTON",
+      "BOXY FIT",
       "DOUBLE STITCHED",
       "HEAVY 320 GSM",
       "3D EMBROIDERED PRINT",

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getProductBySlug } from "@/lib/products";
 import { useCart } from "@/context/CartContext";
-import { useCurrency } from "@/hooks/useCurrency";
+import { useLocalization } from "@/context/LocalizationContext";
 import {
   Carousel,
   CarouselContent,
@@ -25,7 +25,7 @@ const ProductDetail = () => {
   );
 
   const { addToCart, isInCart, toggleCart } = useCart();
-  const { formatPrice } = useCurrency();
+  const { formatPrice } = useLocalization();
 
   const [selectedColor, setSelectedColor] = useState(
     product?.colors[0]?.name || ""

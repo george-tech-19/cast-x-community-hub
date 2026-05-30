@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import { useCart } from "@/context/CartContext";
-import { useCurrency } from "@/hooks/useCurrency";
+import { useLocalization } from "@/context/LocalizationContext";
 import { getFeaturedProducts, getProductUrl } from "@/lib/products";
 import heroBg from "@/assets/hero-bg.jpg";
 import communityBg from "@/assets/community-bg.jpg";
@@ -12,7 +12,7 @@ const WHATSAPP_LINK = "https://whatsapp.com/channel/0029VbBrQbo17En1SxcWC80f";
 
 const Index = () => {
   const { addToCart } = useCart();
-  const { formatPrice } = useCurrency();
+  const { formatPrice } = useLocalization();
 
   return (
     <Layout>

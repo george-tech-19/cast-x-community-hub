@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import CurrencySwitcher from "@/components/CurrencySwitcher";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal, Grid3X3, LayoutGrid, X, ShoppingBag } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
+import { useLocalization } from "@/context/LocalizationContext";
 import { products, getProductUrl } from "@/lib/products";
-import { useCurrency } from "@/hooks/useCurrency";
 
 const categories = ["All", "Hoodies", "T-Shirts", "Accessories"];
 const sortOptions = ["Newest", "Price: Low to High", "Price: High to Low", "Popular"];
@@ -20,6 +23,10 @@ const Products = () => {
   const [gridCols, setGridCols] = useState<3 | 4>(4);
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // i18n and localization hooks
+  const { t } = useTranslation();
+  const { locale, country, region, city, currency, formatPrice } = useLocalization();
 
   useEffect(() => {
     setLoading(true);
@@ -38,15 +45,18 @@ const Products = () => {
   });
 
   const { addToCart } = useCart();
-  const { formatPrice } = useCurrency();
 
   const handleAddToCart = (product: typeof products[number]) => {
     addToCart(product, {
       color: product.colors[0]?.name,
       size: product.sizes[0],
     });
-    toast.success(`${product.name} added to cart`, {
-      description: `Default: ${product.sizes[0]} / ${product.colors[0]?.name}`,
+    
+    // Use formatted currency from localization context
+    const formattedPrice = formatPrice(product.price);
+    
+    toast.success(`${product.name} ${t('add_to_cart')}`, {
+      description: `${product.sizes[0]} / ${product.colors[0]?.name} - ${formattedPrice}`,
     });
   };
 
@@ -54,7 +64,9 @@ const Products = () => {
     <div className={className}>
       {/* Categories */}
       <div className="mb-8">
-        <h3 className="text-xs text-muted-foreground uppercase tracking-widest mb-4 font-semibold">Category</h3>
+        <h3 className="text-xs text-muted-foreground uppercase tracking-widest mb-4 font-semibold">
+          {t('category', 'Category')}
+        </h3>
         <div className="flex flex-col gap-1">
           {categories.map((cat) => (
             <button
@@ -79,7 +91,9 @@ const Products = () => {
 
       {/* Sort */}
       <div className="mb-8">
-        <h3 className="text-xs text-muted-foreground uppercase tracking-widest mb-4 font-semibold">Sort By</h3>
+        <h3 className="text-xs text-muted-foreground uppercase tracking-widest mb-4 font-semibold">
+          {t('sort', 'Sort By')}
+        </h3>
         <div className="flex flex-col gap-1">
           {sortOptions.map((opt) => (
             <button
@@ -118,13 +132,17 @@ const Products = () => {
   return (
     <Layout>
       <section className="section-padding">
+
+
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-3">Collection</p>
-            <h1 className="hero-heading text-foreground">Shop</h1>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-3">{t('category', 'Collection')}</p>
+            <h1 className="hero-heading text-foreground">{t('products', 'Shop')}</h1>
           </div>
-          <p className="text-sm text-muted-foreground">{sorted.length} products</p>
+          <p className="text-sm text-muted-foreground">
+            {sorted.length} {sorted.length === 1 ? t('product') : t('products')}
+          </p>
         </div>
 
         <div className="flex gap-8">
@@ -142,12 +160,12 @@ const Products = () => {
                 <SheetTrigger asChild>
                   <Button variant="outline" size="sm" className="lg:hidden gap-2 text-xs uppercase tracking-wider">
                     <SlidersHorizontal className="h-3.5 w-3.5" />
-                    Filters
+                    {t('filter', 'Filters')}
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-72 bg-background">
                   <SheetHeader>
-                    <SheetTitle className="text-foreground">Filters</SheetTitle>
+                    <SheetTitle className="text-foreground">{t('filter', 'Filters')}</SheetTitle>
                   </SheetHeader>
                   <div className="mt-6">
                     <SidebarFilters />
@@ -217,13 +235,13 @@ const Products = () => {
             {/* Empty state */}
             {!loading && sorted.length === 0 && (
               <div className="text-center py-20">
-                <p className="text-muted-foreground text-lg">No products found</p>
+                <p className="text-muted-foreground text-lg">{t('no_results', 'No products found')}</p>
                 <Button
                   variant="outline"
                   className="mt-4"
                   onClick={() => setActiveCategory("All")}
                 >
-                  View all products
+                  {t('view', 'View')} {t('products', 'all products')}
                 </Button>
               </div>
             )}

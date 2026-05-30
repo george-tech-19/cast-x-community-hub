@@ -3,7 +3,7 @@ import { ShoppingCart, ArrowLeft } from "lucide-react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { useCurrency } from "@/hooks/useCurrency";
+import { useLocalization } from "@/context/LocalizationContext";
 
 const sendCartToWhatsApp = (items: any[], subtotal: number, formatPrice: (price: number) => string) => {
   // Replace with your actual WhatsApp number (e.g., +1234567890)
@@ -30,7 +30,7 @@ const sendCartToWhatsApp = (items: any[], subtotal: number, formatPrice: (price:
 
 const Cart = () => {
   const { items, subtotal, updateQuantity, removeFromCart } = useCart();
-  const { formatPrice } = useCurrency();
+  const { formatPrice } = useLocalization();
 
   return (
     <Layout>
