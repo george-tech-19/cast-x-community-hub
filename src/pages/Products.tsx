@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
 import { useLocalization } from "@/context/LocalizationContext";
 import { products, getProductUrl } from "@/lib/products";
+import { getDiscountedPrice, getDiscountPercentage } from "@/lib/discounts";
 
 const categories = ["All", "Hoodies", "T-Shirts", "Accessories"];
 const sortOptions = ["Newest", "Price: Low to High", "Price: High to Low", "Popular"];
@@ -26,7 +27,7 @@ const Products = () => {
 
   // i18n and localization hooks
   const { t } = useTranslation();
-  const { locale, country, region, city, currency, formatPrice } = useLocalization();
+  const { locale, country, countryCode, region, city, currency, formatPrice } = useLocalization();
 
   useEffect(() => {
     setLoading(true);
@@ -52,8 +53,9 @@ const Products = () => {
       size: product.sizes[0],
     });
     
-    // Use formatted currency from localization context
-    const formattedPrice = formatPrice(product.price);
+    // Calculate and format the price (with discount if applicable)
+    const discountedPrice = getDiscountedPrice(product, countryCode);
+    const formattedPrice = formatPrice(discountedPrice);
     
     toast.success(`${product.name} ${t('add_to_cart')}`, {
       description: `${product.sizes[0]} / ${product.colors[0]?.name} - ${formattedPrice}`,
@@ -120,7 +122,7 @@ const Products = () => {
         <p className="text-muted-foreground text-xs mt-1">Contact us on WhatsApp to order</p>
         <Button
           className="w-full mt-4 text-accent-foreground hover:bg-accent/90 text-xs font-semibold uppercase tracking-wider"
-          onClick={() => window.open("https://wa.me/YOUR_NUMBER_OR_CHANNEL_LINK", "_blank")}
+          onClick={() => window.open("https://whatsapp.com/channel/0029VbBrQbo17En1SxcWC80f", "_blank")}
         >
           <ShoppingBag className="h-3.5 w-3.5 mr-1.5" />
           Order via WhatsApp
@@ -218,18 +220,27 @@ const Products = () => {
             <div className={`grid grid-cols-2 ${gridCols === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"} gap-4 md:gap-6`}>
               {loading
                 ? Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)
-                : sorted.map((product, i) => (
-                    <ProductCard
-                      key={`${product.slug}-${i}`}
-                      images={product.images}
-                      name={product.name}
-                      price={formatPrice(product.price)}
-                      category={product.category}
-                      detailsUrl={getProductUrl(product)}
-                      product={product}
-                      onAddToCart={() => handleAddToCart(product)}
-                    />
-                  ))}
+                : sorted.map((product, i) => {
+                    const discountPercentage = getDiscountPercentage(product, countryCode);
+                    const discountedPrice = getDiscountedPrice(product, countryCode);
+                    const formattedPrice = formatPrice(discountedPrice);
+                    const formattedOriginalPrice = discountPercentage > 0 ? formatPrice(product.price) : undefined;
+                    
+                    return (
+                      <ProductCard
+                        key={`${product.slug}-${i}`}
+                        images={product.images}
+                        name={product.name}
+                        price={formattedPrice}
+                        originalPrice={formattedOriginalPrice}
+                        discountPercentage={discountPercentage > 0 ? discountPercentage : undefined}
+                        category={product.category}
+                        detailsUrl={getProductUrl(product)}
+                        product={product}
+                        onAddToCart={() => handleAddToCart(product)}
+                      />
+                    );
+                  })}
             </div>
 
             {/* Empty state */}

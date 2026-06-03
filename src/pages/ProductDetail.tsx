@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getProductBySlug } from "@/lib/products";
+import { getDiscountedPrice, getDiscountPercentage } from "@/lib/discounts";
 import { useCart } from "@/context/CartContext";
 import { useLocalization } from "@/context/LocalizationContext";
 import {
@@ -25,7 +26,7 @@ const ProductDetail = () => {
   );
 
   const { addToCart, isInCart, toggleCart } = useCart();
-  const { formatPrice } = useLocalization();
+  const { formatPrice, countryCode } = useLocalization();
 
   const [selectedColor, setSelectedColor] = useState(
     product?.colors[0]?.name || ""
@@ -144,9 +145,34 @@ const ProductDetail = () => {
                   {product.name}
                 </h1>
 
-                <p className="text-2xl md:text-3xl font-bold">
-                  {formatPrice(product.price)}
-                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  {(() => {
+                    const discountPercentage = getDiscountPercentage(product, countryCode);
+                    const discountedPrice = getDiscountedPrice(product, countryCode);
+                    const formattedDiscountedPrice = formatPrice(discountedPrice);
+                    const formattedOriginalPrice = formatPrice(product.price);
+                    
+                    return (
+                      <>
+                        {discountPercentage > 0 && (
+                          <span className="bg-red-600 text-white px-4 py-2 rounded-full font-bold text-lg">
+                            {discountPercentage}% OFF
+                          </span>
+                        )}
+                        <div className="flex items-center gap-3">
+                          {discountPercentage > 0 && (
+                            <p className="text-xl md:text-2xl font-bold text-muted-foreground line-through">
+                              {formattedOriginalPrice}
+                            </p>
+                          )}
+                          <p className="text-3xl md:text-4xl font-bold text-foreground">
+                            {formattedDiscountedPrice}
+                          </p>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
               </div>
 
               {/* OPTIONS */}

@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import { useCart } from "@/context/CartContext";
 import { useLocalization } from "@/context/LocalizationContext";
 import { getFeaturedProducts, getProductUrl } from "@/lib/products";
+import { getDiscountedPrice, getDiscountPercentage } from "@/lib/discounts";
 import heroBg from "@/assets/hero-bg.jpg";
 import communityBg from "@/assets/community-bg.jpg";
 
@@ -12,7 +13,7 @@ const WHATSAPP_LINK = "https://whatsapp.com/channel/0029VbBrQbo17En1SxcWC80f";
 
 const Index = () => {
   const { addToCart } = useCart();
-  const { formatPrice } = useLocalization();
+  const { formatPrice, countryCode } = useLocalization();
 
   return (
     <Layout>
@@ -60,18 +61,27 @@ const Index = () => {
           </Link>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {getFeaturedProducts().map((product) => (
-            <ProductCard
-              key={product.slug}
-              images={product.images}
-              name={product.name}
-              price={formatPrice(product.price)}
-              category={product.category}
-              detailsUrl={getProductUrl(product)}
-              product={product}
-              onAddToCart={() => addToCart(product, { color: product.colors[0]?.name, size: product.sizes[0] })}
-            />
-          ))}
+          {getFeaturedProducts().map((product) => {
+            const discountPercentage = getDiscountPercentage(product, countryCode);
+            const discountedPrice = getDiscountedPrice(product, countryCode);
+            const formattedPrice = formatPrice(discountedPrice);
+            const formattedOriginalPrice = discountPercentage > 0 ? formatPrice(product.price) : undefined;
+            
+            return (
+              <ProductCard
+                key={product.slug}
+                images={product.images}
+                name={product.name}
+                price={formattedPrice}
+                originalPrice={formattedOriginalPrice}
+                discountPercentage={discountPercentage > 0 ? discountPercentage : undefined}
+                category={product.category}
+                detailsUrl={getProductUrl(product)}
+                product={product}
+                onAddToCart={() => addToCart(product, { color: product.colors[0]?.name, size: product.sizes[0] })}
+              />
+            );
+          })}
         </div>
       </section>
 

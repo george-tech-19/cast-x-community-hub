@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getExchangeRates, FALLBACK_RATES } from '@/services/currencyConverter';
 
 export interface CurrencySettings {
   code: string;
@@ -7,12 +8,9 @@ export interface CurrencySettings {
   name: string;
 }
 
-// Comprehensive country to currency mapping (50+ countries)
-/**
- * Approximate exchange rates: how many units of foreign currency equal 1 USD
- * Rates updated as of early 2024 - should be refreshed periodically or fetched from API
- */
-const EXCHANGE_RATES_TO_USD: Record<string, number> = {
+// Fallback rates are now imported from currencyConverter service
+// which fetches live rates from ExchangeRate-API
+const FALLBACK_RATES_LOCAL: Record<string, number> = {
   USD: 1,
   EUR: 0.92,
   GBP: 0.79,
@@ -59,8 +57,8 @@ const EXCHANGE_RATES_TO_USD: Record<string, number> = {
   MAD: 10.12,
   DZD: 133.50,
   TND: 3.07,
-  XAF: 615.00,
-  XOF: 615.00,
+  XAF: 562.5, // Corrected CFA rate: 32 USD = 18,000 CFA
+  XOF: 562.5, // Corrected CFA rate: 32 USD = 18,000 CFA
 };
 
 const COUNTRY_CURRENCY_MAP: Record<string, CurrencySettings> = {
@@ -165,6 +163,26 @@ type CurrencyOverride = Record<string, CurrencySettings>;
 export const useCurrency = (countryCode?: string, language?: string) => {
   const [currency, setCurrency] = useState<CurrencySettings>(DEFAULT_CURRENCY);
   const [overrideCurrency, setOverrideCurrency] = useState<CurrencySettings | null>(null);
+  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>(FALLBACK_RATES_LOCAL);
+  const [isLoadingRates, setIsLoadingRates] = useState(true);
+
+  // Fetch exchange rates on mount
+  useEffect(() => {
+    const loadRates = async () => {
+      try {
+        setIsLoadingRates(true);
+        const rates = await getExchangeRates();
+        setExchangeRates(rates);
+      } catch (error) {
+        console.warn('Failed to load exchange rates, using fallback:', error);
+        setExchangeRates(FALLBACK_RATES_LOCAL);
+      } finally {
+        setIsLoadingRates(false);
+      }
+    };
+
+    loadRates();
+  }, []);
 
   // Load persisted override on mount
   useEffect(() => {
@@ -234,9 +252,9 @@ export const useCurrency = (countryCode?: string, language?: string) => {
   );
 
   const getExchangeRate = useCallback((targetCurrencyCode: string): number => {
-    const rate = EXCHANGE_RATES_TO_USD[targetCurrencyCode];
+    const rate = exchangeRates[targetCurrencyCode];
     return rate || 1;
-  }, []);
+  }, [exchangeRates]);
 
   const convertFromUSD = useCallback(
     (usdAmount: number, targetCurrencyCode: string): number => {
@@ -271,6 +289,7 @@ export const useCurrency = (countryCode?: string, language?: string) => {
     formatter,
     currencyOptions: COUNTRY_CURRENCY_MAP,
     convertFromUSD,
+    isLoadingRates,
   };
 };
 

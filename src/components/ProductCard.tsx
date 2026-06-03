@@ -17,6 +17,8 @@ interface ProductCardProps {
   images: string[];
   name: string;
   price: string;
+  originalPrice?: string;
+  discountPercentage?: number;
   category: string;
   detailsUrl: string;
   onAddToCart?: () => void;
@@ -27,6 +29,8 @@ const ProductCard = ({
   images,
   name,
   price,
+  originalPrice,
+  discountPercentage,
   category,
   detailsUrl,
   onAddToCart,
@@ -47,6 +51,13 @@ const ProductCard = ({
     <div className="group cursor-pointer w-full" onClick={handleCardClick}>
       {/* IMAGE / CAROUSEL */}
       <div className="relative overflow-hidden bg-card aspect-[3/4] w-full rounded-2xl md:rounded-3xl">
+        {/* DISCOUNT BADGE */}
+        {discountPercentage && discountPercentage > 0 && (
+          <div className="absolute top-3 left-3 z-10 bg-red-600 text-white px-3 py-1.5 rounded-full font-bold text-sm md:text-base shadow-lg">
+            {discountPercentage}% OFF
+          </div>
+        )}
+
         <Carousel
           plugins={[
             Autoplay({
@@ -141,9 +152,16 @@ const ProductCard = ({
           {name}
         </h3>
 
-        <p className="text-foreground font-bold text-base md:text-lg">
-          {price}
-        </p>
+        <div className="flex items-center gap-2">
+          {originalPrice && (
+            <span className="text-muted-foreground font-semibold text-sm md:text-base line-through">
+              {originalPrice}
+            </span>
+          )}
+          <p className="text-foreground font-bold text-base md:text-lg">
+            {price}
+          </p>
+        </div>
       </div>
     </div>
   );
