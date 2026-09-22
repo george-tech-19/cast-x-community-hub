@@ -11,6 +11,12 @@ import productTshirt17 from "@/assets/warm1.jpeg";
 import productTshirt18 from "@/assets/warm2.jpeg";
 import productTshirt19 from "@/assets/warm3.jpeg";
 import productAccessories from "@/assets/grey2.jpeg";
+import PULL from "@/assets/PULL .jpeg";
+import PULL1 from "@/assets/PULL 1.jpeg";
+import PULLblack from "@/assets/PULLblackb.jpeg";
+import PULLblackf from "@/assets/PULLblackf.jpeg";
+import pullwhite from "@/assets/Pullwhite.png";
+import pullwhiteb from "@/assets/Pullwhiteb.png";
 
 export type Product = {
   slug: string;
@@ -22,7 +28,7 @@ export type Product = {
   images: string[];
   description: string;
   sizes: readonly string[];
-  colors: Array<{ name: string; value: string }>;
+  colors: readonly { name: string; value: string }[];
   features: readonly string[];
 };
 
@@ -30,8 +36,8 @@ const rawProducts = [
   {
     slug: "ONLY GOD SAVES GREY TSHIRT",
     name: "ONLY GOD SAVES GREY TSHIRT",
-    price: 22,
-    priceLabel: "$22",
+    price: 17.49,
+    priceLabel: "$17.49",
     category: "T-Shirts",
     image: productHoodie,
     images: [productHoodie, productTshirt11, productTshirt21, productAccessories],
@@ -50,8 +56,8 @@ const rawProducts = [
   {
     slug: "ONLY GOD SAVES DEEP NAVY TSHIRT",
     name: "ONLY GOD SAVES DEEP NAVY TSHIRT",
-    price: 32,
-    priceLabel: "$32",
+    price: 21.86,
+    priceLabel: "$21.86",
     category: "T-Shirts",
     image: productTshirt,
     images: [productTshirt, productTshirt13, productTshirt12, productTshirt14],
@@ -71,8 +77,8 @@ const rawProducts = [
   {
     slug: "ONLY GOD SAVES WARM BEIGE TSHIRT",
     name: "ONLY GOD SAVES WARM BEIGE TSHIRT",
-    price: 32,
-    priceLabel: "$32",
+    price: 26.23,
+    priceLabel: "$26.23",
     category: "T-Shirts",
     image: productTshirt2,
     images: [productTshirt2, productTshirt17, productTshirt18, productTshirt19],
@@ -87,6 +93,29 @@ const rawProducts = [
       "DOUBLE STITCHED",
       "HEAVY 320 GSM",
       "3D EMBROIDERED PRINT",
+    ],
+  },
+  {
+    slug: "ONLY GOD SAVES HOODIE",
+    name: "ONLY GOD SAVES HOODIE",
+    price: 21.86,
+    priceLabel: "$21.86",
+    category: "Hoodies",
+    image: PULL,
+    images: [PULL,PULL1,PULLblack,PULLblackf,pullwhite,pullwhiteb],
+    description: "A minimal essential hoodie for modern streetwear, made from pure organic cotton with a clean finish. Eco friendly/sustainable.",
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: [
+      { name: "White", value: "#ffffff" },
+      { name: "Black", value: "#000000" },
+      { name: "Brown", value: "#A52A2A" },
+    ],
+    features: [
+      "COMBED ORGANIC COTTON",
+      "BOXY FIT",
+      "DOUBLE STITCHED",
+      "HEAVY weight GSM",
+      "3D SCREEN PRINT",
     ],
   },
 ] as const;

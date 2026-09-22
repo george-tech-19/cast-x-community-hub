@@ -51,10 +51,9 @@ const ProductCard = ({
     <div className="group cursor-pointer w-full" onClick={handleCardClick}>
       {/* IMAGE / CAROUSEL */}
       <div className="relative overflow-hidden bg-card aspect-[3/4] w-full rounded-2xl md:rounded-3xl">
-        {/* DISCOUNT BADGE */}
         {discountPercentage && discountPercentage > 0 && (
           <div className="absolute top-3 left-3 z-10 bg-red-600 text-white px-3 py-1.5 rounded-full font-bold text-sm md:text-base shadow-lg">
-            {discountPercentage}% OFF
+            {Math.round(discountPercentage)}% OFF
           </div>
         )}
 
