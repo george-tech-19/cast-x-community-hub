@@ -141,7 +141,7 @@ export const products: Product[] = rawProducts.map(processProduct);
 
 export const getProductBySlug = (slug: string) => products.find((product) => product.slug === slug);
 
-export const getFeaturedProducts = () => products.slice(0, 3);
+export const getFeaturedProducts = () => products.slice(0, 4);
 
 export const getProductUrl = (product: Product) => `/product/${product.slug}`;
 

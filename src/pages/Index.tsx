@@ -60,7 +60,7 @@ const Index = () => {
             View All <ArrowRight size={16} />
           </Link>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {getFeaturedProducts().map((product) => {
             const discountPercentage = getDiscountPercentage(product, countryCode);
             const discountedPrice = getDiscountedPrice(product, countryCode);
