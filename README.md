@@ -198,6 +198,12 @@ npm run lint
 - Cart operations are optimized for variant uniqueness using color + size + product slug.
 - The checkout flow is intentionally lightweight and uses external messaging rather than a payment gateway.
 
+## Search engine indexing
+
+This project uses Vite and React Router, not the Next.js App or Pages Router. The dev server and production build generate `public/sitemap.xml` and `public/robots.txt` from the public routes in `src/App.tsx` and the product catalog in `src/lib/products.ts`. The cart and not-found routes are excluded.
+
+Set `NEXT_PUBLIC_SITE_URL=https://www.castxclothing.com` in the Vercel project's environment variables for every deployment environment. For local work, copy `.env.example` to `.env.local`, then run `npm run dev` or `npm run build`. The generated files are served locally at `http://localhost:8080/sitemap.xml` and `http://localhost:8080/robots.txt`; after deployment, check `https://www.castxclothing.com/sitemap.xml` and `https://www.castxclothing.com/robots.txt`.
+
 ## Customization guide
 
 - Add products / change inventory in `src/lib/products.ts`.

@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "dev": "node scripts/generate-seo-files.mjs development && vite",
+    "build": "node scripts/generate-seo-files.mjs production && vite build",
+    "build:dev": "node scripts/generate-seo-files.mjs development && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
