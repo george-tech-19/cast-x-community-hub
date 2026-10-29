@@ -6,7 +6,7 @@ import { createServer, loadEnv } from "vite";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const mode = process.argv[2] ?? "production";
 const env = loadEnv(mode, root, "");
-const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ;
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.castxclothing.com";
 
 if (!configuredSiteUrl) {
   throw new Error(
